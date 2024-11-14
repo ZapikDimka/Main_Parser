@@ -90,9 +90,24 @@ Error handling is implemented with `anyhow` for flexible context-based error rep
 ## Makefile
 The `Makefile` includes commands to simplify running, testing, formatting, and linting the project:
 ```bash
-make run         # Run the project
-make test        # Run all tests
-make format      # Format code with cargo fmt
-make lint        # Lint code with cargo clippy
+run:
+	cargo run
+release:
+	cargo run --release
+build:
+	cargo build
+build-release:
+	cargo build --release
+test:
+	cargo test
+format:
+	cargo fmt
+lint:
+	cargo clippy -- -D warnings
+precommit: format lint test
+clean:
+	cargo clean
+update:
+	cargo update
 ```
 
