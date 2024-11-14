@@ -1,0 +1,37 @@
+// Ігнорування пробілів (використовується всюди)
+WHITESPACE = _{ " " | "\t" | "\r" | "\n" }
+
+// Основне правило для JSON-файлу
+json = { SOI ~ WHITESPACE* ~ value ~ WHITESPACE* ~ EOI }
+
+// Основні типи JSON-значень
+value = _{ object | array | string | number | boolean | null }
+
+// Об'єкти JSON з пробілами між ключами, двокрапками та значеннями
+object = { "{" ~ WHITESPACE* ~ (pair ~ (WHITESPACE* ~ "," ~ WHITESPACE* ~ pair)*)? ~ WHITESPACE* ~ "}" }
+pair = { string ~ WHITESPACE* ~ ":" ~ WHITESPACE* ~ value }
+
+// Масиви JSON з пробілами між елементами
+array = { "[" ~ WHITESPACE* ~ (value ~ (WHITESPACE* ~ "," ~ WHITESPACE* ~ value)*)? ~ WHITESPACE* ~ "]" }
+
+// Рядки JSON з підтримкою Unicode символів і розширеними escape-послідовностями
+string = @{ "\"" ~ (character | escape_sequence)* ~ "\"" }
+
+// Будь-який символ, окрім лапок, зворотного слешу та контрольних символів (0x00-0x1F)
+character = _{ !( "\"" | "\\" | "\u{0000}" | "\u{0001}" | "\u{0002}" | "\u{0003}" | "\u{0004}" | "\u{0005}" | "\u{0006}" | "\u{0007}" | "\u{0008}" | "\u{0009}" | "\u{000A}" | "\u{000B}" | "\u{000C}" | "\u{000D}" | "\u{000E}" | "\u{000F}" | "\u{0010}" | "\u{0011}" | "\u{0012}" | "\u{0013}" | "\u{0014}" | "\u{0015}" | "\u{0016}" | "\u{0017}" | "\u{0018}" | "\u{0019}" | "\u{001A}" | "\u{001B}" | "\u{001C}" | "\u{001D}" | "\u{001E}" | "\u{001F}" ) ~ ANY }
+
+// Escape-послідовності
+escape_sequence = _{ "\\" ~ ( "\"" | "\\" | "/" | "b" | "f" | "n" | "r" | "t" | "u" ~ ASCII_HEX_DIGIT{4} ) }
+
+// Числа JSON з підтримкою цілого, дробового та експоненціального форматів
+number = @{
+    "-"? ~ ("0" | ASCII_NONZERO_DIGIT ~ ASCII_DIGIT*) ~
+    ("." ~ ASCII_DIGIT+)? ~
+    (("e" | "E") ~ ("+" | "-")? ~ ASCII_DIGIT+)?
+}
+
+// Логічні значення
+boolean = { "true" | "false" }
+
+// Значення null
+null = { "null" }

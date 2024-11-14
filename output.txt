@@ -1,0 +1,36 @@
+Object {
+    "address": Object {
+        "city": String("New York"),
+        "postal_code": String("10001"),
+        "street": String("123 Main St"),
+    },
+    "age": Number(30),
+    "hobbies": Array [
+        Object {
+            "frequency": String("daily"),
+            "name": String("Reading"),
+        },
+        Object {
+            "frequency": String("weekly"),
+            "name": String("Cycling"),
+        },
+    ],
+    "is_student": Bool(false),
+    "languages": Array [
+        String("English"),
+        String("Spanish"),
+        String("French"),
+    ],
+    "name": String("John Doe"),
+    "phone_numbers": Array [
+        Object {
+            "number": String("212-555-1234"),
+            "type": String("home"),
+        },
+        Object {
+            "number": String("646-555-5678"),
+            "type": String("work"),
+        },
+    ],
+    "some_key_to_edit": String("new_value"),
+}

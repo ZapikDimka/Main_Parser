@@ -1,0 +1,36 @@
+{
+  "address": {
+    "city": "New York",
+    "postal_code": "10001",
+    "street": "123 Main St"
+  },
+  "age": 30,
+  "hobbies": [
+    {
+      "frequency": "daily",
+      "name": "Reading"
+    },
+    {
+      "frequency": "weekly",
+      "name": "Cycling"
+    }
+  ],
+  "is_student": false,
+  "languages": [
+    "English",
+    "Spanish",
+    "French"
+  ],
+  "name": "John Doe",
+  "phone_numbers": [
+    {
+      "number": "212-555-1234",
+      "type": "home"
+    },
+    {
+      "number": "646-555-5678",
+      "type": "work"
+    }
+  ],
+  "some_key_to_edit": "new_value"
+}
