@@ -1,9 +1,9 @@
 
 # json_parser_with_pest
 
-https://docs.rs/my_main_parser_kma_zaporozhetss/latest/my_main_parser_kma_zaporozhetss/
+https://docs.rs/json_parser_with_pest/latest/json_parser_with_pest/
 
-https://crates.io/crates/my_main_parser_kma_zaporozhetss
+https://crates.io/crates/json_parser_with_pest
 
 
 ## Overview
