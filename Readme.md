@@ -1,5 +1,5 @@
 
-# Zaporozhets JSON Parser
+# json_parser_with_pest
 
 https://docs.rs/my_main_parser_kma_zaporozhetss/latest/my_main_parser_kma_zaporozhetss/
 
@@ -7,7 +7,7 @@ https://crates.io/crates/my_main_parser_kma_zaporozhetss
 
 
 ## Overview
-Zaporozhets JSON Parser is a JSON processing tool written in Rust, capable of parsing JSON files, validating schemas, and converting JSON to various formats like YAML and XML. Built with Pest for grammar parsing, this parser supports the manipulation of JSON files with a command-line interface (CLI).
+json_parser_with_pest is a JSON processing tool written in Rust, capable of parsing JSON files, validating schemas, and converting JSON to various formats like YAML and XML. Built with Pest for grammar parsing, this parser supports the manipulation of JSON files with a command-line interface (CLI).
 
 ## Features
 - Parse and validate JSON files against a provided schema.

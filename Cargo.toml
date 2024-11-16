@@ -1,25 +1,21 @@
 [package]
-name = "my_main_parser_kma_zaporozhetss"
+name = "json_parser_with_pest"
 version = "1.0.0"
 edition = "2021"
 license = "MIT"
 description = "A JSON parser created in Rust using Pest grammar."
-documentation = "https://docs.rs/my_main_parser_kma_zaporozhetss"
+documentation = "https://docs.rs/json_parser_with_pest/latest"
 
 [dependencies]
-pest = "2.1"
-pest_derive = "2.1"
-anyhow = "1.0"  # для обробки помилок
-thiserror = "1.0"
-serde_json = "1.0.132"
-env_logger = "0.11.5"
-log = "0.4.22"
-serde_yaml = "0.9.34+deprecated"
-quick-xml = { version = "0.37.0", features = ["serialize"] }
-serde = { version = "1.0", features = ["derive"] }
-tempfile = "3.3"
-clap = { version = "4.5.20", features = ["cargo"] }
-
-
-
-
+pest = "2.1"  # Grammar rules and parsing
+pest_derive = "2.1"  # Derive macros for Pest
+anyhow = "1.0"  # Error handling for library and tests
+thiserror = "1.0"  # Custom error types
+serde_json = "1.0.132"  # JSON serialization and deserialization
+env_logger = "0.11.5"  # Logging configuration
+log = "0.4.22"  # Logging macros
+serde_yaml = "0.9.33"  # YAML serialization (updated to remove +deprecated flag)
+quick-xml = { version = "0.37.0", features = ["serialize"] }  # XML serialization
+serde = { version = "1.0", features = ["derive"] }  # Serialization/Deserialization
+tempfile = "3.3"  # Temporary file handling
+clap = { version = "4.5.20", features = ["cargo","derive"] }  # Command-line argument parsing

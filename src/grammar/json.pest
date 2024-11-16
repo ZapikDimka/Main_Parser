@@ -1,13 +1,53 @@
-WHITESPACE = _{ " " | "\t" | "\r" | "\n" | comment }
+// Ignores all whitespace characters (used throughout the grammar)
+WHITESPACE = _{ " " | "\t" | "\r" | "\n" }
 
-json = _{ object | array }
-object = { "{" ~ (pair ~ ("," ~ pair)*)? ~ "}" }
-pair = { string ~ ":" ~ value }
-array = { "[" ~ (value ~ ("," ~ value)*)? ~ "]" }
-value = _{ string | number | object | array | boolean | null | date_time }
-string = { "\"" ~ (("\\\"" | "\\\\" | "\\/" | "\\b" | "\\f" | "\\n" | "\\r" | "\\t" | "\\u" ~ ('0'..'9' | 'a'..'f' | 'A'..'F')* | !"\\" ~ ANY))* ~ "\"" }
-number = { "-"? ~ ('0'..'9')+ ~ ("." ~ ('0'..'9')+)? ~ (("e" | "E") ~ ("+" | "-")? ~ ('0'..'9')+)? }
+// Main rule for parsing a JSON file
+json = { SOI ~ WHITESPACE* ~ value ~ WHITESPACE* ~ EOI }
+
+// Supported JSON value types
+value = _{ object | array | string | number | boolean | null | date | identifier | version | key_value_array }
+
+// JSON object: key-value pairs enclosed in curly braces with optional whitespace
+object = { "{" ~ WHITESPACE* ~ (pair ~ (WHITESPACE* ~ "," ~ WHITESPACE* ~ pair)*)? ~ WHITESPACE* ~ "}" }
+pair = { string ~ WHITESPACE* ~ ":" ~ WHITESPACE* ~ value }
+
+// JSON array: a list of values enclosed in square brackets with optional whitespace
+array = { "[" ~ WHITESPACE* ~ (value ~ (WHITESPACE* ~ "," ~ WHITESPACE* ~ value)*)? ~ WHITESPACE* ~ "]" }
+
+// JSON string: supports Unicode characters and extended escape sequences
+string = @{ "\"" ~ (character | escape_sequence)* ~ "\"" }
+
+// JSON character: any character except double quotes, backslashes, or control characters (0x00-0x1F)
+character = _{ !( "\"" | "\\" | "\u{0000}" | "\u{0001}" | "\u{0002}" | "\u{0003}" | "\u{0004}" | "\u{0005}" | "\u{0006}" | "\u{0007}" | "\u{0008}" | "\u{0009}" | "\u{000A}" | "\u{000B}" | "\u{000C}" | "\u{000D}" | "\u{000E}" | "\u{000F}" | "\u{0010}" | "\u{0011}" | "\u{0012}" | "\u{0013}" | "\u{0014}" | "\u{0015}" | "\u{0016}" | "\u{0017}" | "\u{0018}" | "\u{0019}" | "\u{001A}" | "\u{001B}" | "\u{001C}" | "\u{001D}" | "\u{001E}" | "\u{001F}" ) ~ ANY }
+
+// JSON escape sequences for special characters and Unicode
+escape_sequence = _{ "\\" ~ ( "\"" | "\\" | "/" | "b" | "f" | "n" | "r" | "t" | "u" ~ ASCII_HEX_DIGIT{4} ) }
+
+// JSON number: supports integers, floating-point, and exponential formats
+number = @{
+    "-"? ~ ("0" | ASCII_NONZERO_DIGIT ~ ASCII_DIGIT*) ~
+    ("." ~ ASCII_DIGIT+)? ~
+    (("e" | "E") ~ ("+" | "-")? ~ ASCII_DIGIT+)?
+}
+
+// JSON boolean values: true or false
 boolean = { "true" | "false" }
+
+// JSON null value
 null = { "null" }
-comment = _{ "//" ~ (!"\n" ~ ANY)* ~ "\n" | "/*" ~ (!"*/" ~ ANY)* ~ "*/" }
-date_time = { "\"" ~ ('0'..'9')* ~ "-" ~ ('0'..'9')* ~ "-" ~ ('0'..'9')* ~ "T" ~ ('0'..'9')* ~ ":" ~ ('0'..'9')* ~ ":" ~ ('0'..'9')* ~ ("Z" | ("." ~ ('0'..'9')* ~ "Z")) ~ "\"" }
+
+// Date format: YYYY-MM-DD (ISO 8601 format)
+date = @{ ASCII_DIGIT{4} ~ "-" ~ ASCII_DIGIT{2} ~ "-" ~ ASCII_DIGIT{2} }
+
+// Identifier: starts with a letter and can include letters, digits, or underscores
+identifier = @{ ASCII_ALPHA ~ (ASCII_ALPHANUMERIC | "_")* }
+
+// SemVer version format: supports versions like 1.0.0, 2.1.3-alpha
+version = @{
+    ASCII_DIGIT+ ~ "." ~ ASCII_DIGIT+ ~ "." ~ ASCII_DIGIT+ ~
+    ( "-" ~ (ASCII_ALPHANUMERIC | "-")+ )? ~
+    ( "+" ~ (ASCII_ALPHANUMERIC | ".")+ )?
+}
+
+// Array of key-value pairs: e.g., [ { "key1": "value1" }, { "key2": "value2" } ]
+key_value_array = { "[" ~ WHITESPACE* ~ (object ~ (WHITESPACE* ~ "," ~ WHITESPACE* ~ object)*)? ~ WHITESPACE* ~ "]" }

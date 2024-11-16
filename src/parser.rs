@@ -8,11 +8,109 @@ use std::path::Path;
 use std::str::FromStr;
 use thiserror::Error;
 
+
 /// JSONParser struct, generated from the grammar defined in `json.pest`.
 /// This struct is used to parse JSON based on the defined rules in the `json.pest` grammar file.
+///
+/// # Grammar Documentation
+///
+/// ## WHITESPACE
+/// Matches spaces, tabs, and newlines. Used to ignore non-significant whitespace.
+///
+/// - Example:
+///   - Input: `"  \n\t"`
+///   - Match: `WHITESPACE`
+///
+/// ## json
+/// Entry point for JSON. Matches the entire JSON document.
+///
+/// - Example:
+///   - Input: `{ "key": "value" }`
+///   - Match: Valid JSON structure.
+///
+/// ## value
+/// Matches any valid JSON value, including:
+/// - Objects: `{ "key": "value" }`
+/// - Arrays: `[1, 2, 3]`
+/// - Strings: `"string"`
+/// - Numbers: `123.45`
+/// - Booleans: `true`, `false`
+/// - Null: `null`
+///
+/// ## object
+/// Matches a JSON object, which contains key-value pairs.
+///
+/// - Example:
+///   - Input: `{ "key": "value", "key2": "value2" }`
+///   - Match: Valid JSON object.
+///
+/// ## array
+/// Matches a JSON array, which contains a list of values.
+///
+/// - Example:
+///   - Input: `[1, "two", null, false]`
+///   - Match: Valid JSON array.
+///
+/// ## string
+/// Matches a JSON string, supporting escape sequences and Unicode.
+///
+/// - Example:
+///   - Input: `"Hello World"`
+///   - Match: Valid JSON string.
+///
+/// ## number
+/// Matches a JSON number, including integers and floating-point numbers.
+///
+/// - Example:
+///   - Input: `123`, `-0.45`, `1e10`
+///   - Match: Valid JSON number.
+///
+/// ## boolean
+/// Matches `true` or `false`.
+///
+/// - Example:
+///   - Input: `true`
+///   - Match: Boolean true value.
+///
+/// ## null
+/// Matches the literal `null`.
+///
+/// - Example:
+///   - Input: `null`
+///   - Match: JSON null value.
+///
+/// ## date
+/// Matches dates in the format `YYYY-MM-DD`.
+///
+/// - Example:
+///   - Input: `2023-11-15`
+///   - Match: Valid date string.
+///
+/// ## identifier
+/// Matches a valid identifier starting with a letter, followed by letters, digits, or `_`.
+///
+/// - Example:
+///   - Input: `key_name`
+///   - Match: Valid identifier.
+///
+/// ## version
+/// Matches a semantic version number in `SemVer` format.
+///
+/// - Example:
+///   - Input: `1.0.0`, `2.1.3-alpha`
+///   - Match: Valid version string.
+///
+/// ## key_value_array
+/// Matches an array of objects where each object is a key-value pair.
+///
+/// - Example:
+///   - Input: `[ { "key1": "value1" }, { "key2": "value2" } ]`
+///   - Match: Valid JSON key-value array.
+
+
 #[derive(Parser)]
 #[grammar = "json.pest"]
-struct JSONParser;
+pub struct JSONParser;
 
 /// Custom error type for JSON parsing, schema validation, and file-related errors.
 #[derive(Error, Debug)]
